@@ -1,4 +1,4 @@
-FROM dzwicker/docker-ubuntu:latest
+FROM java:8-jre
 MAINTAINER daniel.zwicker@in2experience.com
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -12,14 +12,15 @@ RUN \
 COPY entry-point.sh /entry-point.sh
 
 RUN \
-    export YOUTRACK_VERSION=6.5.17057 && \
+    export YOUTRACK_VERSION=7.0.27705 && \
     mkdir -p /usr/local/youtrack && \
     mkdir -p /var/lib/youtrack && \
     cd /usr/local/youtrack && \
     echo "$YOUTRACK_VERSION" > version.docker.image && \
     curl -L https://download.jetbrains.com/charisma/youtrack-${YOUTRACK_VERSION}.zip > youtrack.zip && \
     unzip youtrack.zip && \
-    rm -f youtrack.zip && \
+    cp -r youtrack-*/* . && \
+    rm -fr youtrack* && \
     chown -R youtrack:youtrack /usr/local/youtrack
 
 USER youtrack
